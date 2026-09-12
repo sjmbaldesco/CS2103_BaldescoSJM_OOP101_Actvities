@@ -11,20 +11,20 @@ import java.util.Scanner;
 public class Canteen {
 
     // ===== Menu data, stored as parallel arrays =====
-    // ITEM_NAMES[i] is priced at ITEM_PRICES[i]
-    static final String[] ITEM_NAMES = {"Burger", "Pizza", "Pasta", "Sandwich", "Milk Tea"};
-    static final double[] ITEM_PRICES = {80.00, 120.00, 100.00, 70.00, 90.00};
+    // itemNames[i] is priced at itemPrices[i]
+    static final String[] itemNames = {"Burger", "Pizza", "Pasta", "Sandwich", "Milk Tea"};
+    static final double[] itemPrices = {80.00, 120.00, 100.00, 70.00, 90.00};
 
     // ===== Order rules =====
-    static final int MIN_QUANTITY = 1;
-    static final int MAX_QUANTITY = 10;
-    static final double BULK_THRESHOLD = 500.00;
+    static final int minQuantity = 1;
+    static final int maxQuantity = 10;
+    static final double bulkThreshold = 500.00;
 
     // ===== Discount rates =====
-    static final double STUDENT_BULK_RATE = 0.15;
-    static final double STUDENT_RATE = 0.10;
-    static final double BULK_RATE = 0.05;
-    static final double NO_DISCOUNT_RATE = 0.00;
+    static final double studentBulkRate = 0.15;
+    static final double studentRate = 0.10;
+    static final double bulkRate = 0.05;
+    static final double noDiscountRate = 0.00;
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -57,7 +57,7 @@ public class Canteen {
             String studentAnswer = input.next();
             boolean isStudent = studentAnswer.equalsIgnoreCase("Y");
 
-            double subtotal = ITEM_PRICES[itemNumber - 1] * quantity;
+            double subtotal = itemPrices[itemNumber - 1] * quantity;
             double discountRate = getDiscountRate(isStudent, subtotal);
             double discount = subtotal * discountRate;
             double orderTotal = subtotal - discount;
@@ -86,8 +86,8 @@ public class Canteen {
      */
     public static void displayMenu() {
         System.out.println("===== M E N U =====");
-        for (int i = 0; i < ITEM_NAMES.length; i++) {
-            System.out.printf("%d. %s - $%.2f%n", i + 1, ITEM_NAMES[i], ITEM_PRICES[i]);
+        for (int i = 0; i < itemNames.length; i++) {
+            System.out.printf("%d. %s - $%.2f%n", i + 1, itemNames[i], itemPrices[i]);
         }
         System.out.println();
     }
@@ -95,11 +95,11 @@ public class Canteen {
     /**
      * Checks whether the order is valid.
      * The item number must match a menu choice and the quantity must be
-     * at least MIN_QUANTITY but no more than MAX_QUANTITY.
+     * at least minQuantity but no more than maxQuantity.
      */
     public static boolean isValidOrder(int itemNumber, int quantity) {
-        boolean validItem = (itemNumber >= 1 && itemNumber <= ITEM_NAMES.length);
-        boolean validQuantity = (quantity >= MIN_QUANTITY && quantity <= MAX_QUANTITY);
+        boolean validItem = (itemNumber >= 1 && itemNumber <= itemNames.length);
+        boolean validQuantity = (quantity >= minQuantity && quantity <= maxQuantity);
         return validItem && validQuantity;
     }
 
@@ -109,14 +109,14 @@ public class Canteen {
      * condition is checked first and the customer never receives two discounts.
      */
     public static double getDiscountRate(boolean isStudent, double subtotal) {
-        if (isStudent && subtotal >= BULK_THRESHOLD) {
-            return STUDENT_BULK_RATE;
+        if (isStudent && subtotal >= bulkThreshold) {
+            return studentBulkRate;
         } else if (isStudent) {
-            return STUDENT_RATE;
-        } else if (subtotal >= BULK_THRESHOLD) {
-            return BULK_RATE;
+            return studentRate;
+        } else if (subtotal >= bulkThreshold) {
+            return bulkRate;
         } else {
-            return NO_DISCOUNT_RATE;
+            return noDiscountRate;
         }
     }
 
